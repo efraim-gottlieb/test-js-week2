@@ -27,10 +27,10 @@ while (choice !== "4") {
   } else if (choice == "3") {
     let buyOrSell
     let idOrName
-    buyOrSell = +input('Enter your choice\n1. buy\n2. sell ')
+    buyOrSell = +input('Enter your choice\n1. buy\n2. sell')
     idOrName = input('Enter id or name of stock ')
     if (buyOrSell === 1) {
-      operateOnStock('sell', idOrName)
+      operateOnStock('buy', idOrName)
     }
     else if (buyOrSell === 2){
       operateOnStock('sell', idOrName)
