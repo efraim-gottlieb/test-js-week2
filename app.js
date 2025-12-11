@@ -1,3 +1,3 @@
 import { stockMarket } from "./data/stocks.js";
 
-console.log(stockMarket.stocks[0])
+`operation must be “buy” or “sell”`

@@ -1,4 +1,5 @@
 import { stockMarket } from "../data/stocks.js";
+import input from "analiza-sync";
 const stocks = stockMarket.stocks;
 
 const getCategoryIndexes = (category) => {
@@ -34,19 +35,17 @@ const updateCategoryPrice = (category, increment) => {
   });
 };
 
-const saleStock = (stockId) => {
+const saleStock = (stockId, amount) => {
   const stockIndex = getIndexOfStock(stockId);
-  stocks[stockIndex].availableStocks--;
-  updateLastUpdated();
+  stocks[stockIndex].availableStocks -= amount;
   addToPreviousPrices(stockIndex, stocks[stockIndex].currentPrice);
   updateStockPrice(stockIndex, 1.05);
   updateCategoryPrice(stocks[stockIndex].category, 1.01);
 };
 
-const buyStock = (stockId) => {
+const buyStock = (stockId, amount) => {
   const stockIndex = getIndexOfStock(stockId);
-  stocks[stockIndex].availableStocks++;
-  updateLastUpdated();
+  stocks[stockIndex].availableStocks += amount;
   addToPreviousPrices(stockIndex, stocks[stockIndex].currentPrice);
   updateStockPrice(stockIndex, 0.95);
   updateCategoryPrice(stocks[stockIndex].category, 0.99);
@@ -69,9 +68,25 @@ const searchStock = (identifier) => {
 const filterStocksByPrice = (givenPrice, above) => {
   if (above) {
     return stocks.filter((stock) => stock.currentPrice >= givenPrice);
-  } else {return stocks.filter((stock) => stock.currentPrice <= givenPrice);}
+  } else {
+    return stocks.filter((stock) => stock.currentPrice <= givenPrice);
+  }
 };
-// const  OperateOnStock = (operation, identifier) => {
-//   `operation must be “buy” or “sell`
-// }
-console.log(filterStocksByPrice(70, true));
+
+const OperateOnStock = (operation, identifier) => {
+  const action = operation === "sell" ? saleStock : buyStock;
+  let stockId;
+  do {
+    stockId = searchStock(identifier).id;
+  } while (stockId === undefined);
+  let amount;
+  do {
+    amount = input("Enter amount of stocks you want to buy ");
+  } while (
+    operation === "sell" &&
+    amount > stocks[getIndexOfStock(stockId)].availableStocks
+  );
+  action(stockId, amount);
+  updateLastUpdated();
+};
+
