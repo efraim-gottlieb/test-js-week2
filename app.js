@@ -1,3 +1,3 @@
-import { stockMarket } from "./data/stock.js";
+import { stockMarket } from "./data/stocks.js";
 
 console.log(stockMarket.stocks[0])
