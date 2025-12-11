@@ -45,7 +45,7 @@ const saleStock = (stockId, amount) => {
 
 const buyStock = (stockId, amount) => {
   const stockIndex = getIndexOfStock(stockId);
-  stocks[stockIndex].availableStocks += amount;
+  stocks[stockIndex].availableStocks += (+amount);
   addToPreviousPrices(stockIndex, stocks[stockIndex].currentPrice);
   updateStockPrice(stockIndex, 0.95);
   updateCategoryPrice(stocks[stockIndex].category, 0.99);
