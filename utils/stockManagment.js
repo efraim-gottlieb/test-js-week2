@@ -81,7 +81,6 @@ export const operateOnStock = (operation, identifier) => {
   let amount;
   do {
     amount = input("Enter amount of stocks you want to buy or sell ");
-    operation = input('Enter buy or sell')
   } while (
     operation === "sell" &&
     amount > stocks[getIndexOfStock(stockId)].availableStocks
