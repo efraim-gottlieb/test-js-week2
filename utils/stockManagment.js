@@ -28,16 +28,15 @@ const updateStockPrice = (stockIndex, increment) => {
 
 const updateCategoryPrice = (category, increment) => {
   const categoryIndexes = getCategoryIndexes(category);
-  categoryIndexes.forEach((index)=>{
-    addToPreviousPrices(index, stocks[index].currentPrice)
-    updateStockPrice(index, increment)
-
-  })
+  categoryIndexes.forEach((index) => {
+    addToPreviousPrices(index, stocks[index].currentPrice);
+    updateStockPrice(index, increment);
+  });
 };
 
 const saleStock = (stockId) => {
   const stockIndex = getIndexOfStock(stockId);
-  stocks[stockIndex].availableStocks --
+  stocks[stockIndex].availableStocks--;
   updateLastUpdated();
   addToPreviousPrices(stockIndex, stocks[stockIndex].currentPrice);
   updateStockPrice(stockIndex, 1.05);
@@ -46,16 +45,27 @@ const saleStock = (stockId) => {
 
 const buyStock = (stockId) => {
   const stockIndex = getIndexOfStock(stockId);
-  stocks[stockIndex].availableStocks ++
+  stocks[stockIndex].availableStocks++;
   updateLastUpdated();
   addToPreviousPrices(stockIndex, stocks[stockIndex].currentPrice);
   updateStockPrice(stockIndex, 0.95);
   updateCategoryPrice(stocks[stockIndex].category, 0.99);
 };
 
-
-
-// const  searchStock = (identifier) => {}
+const searchStock = (identifier) => {
+  const find = stocks.find((stock) => {
+    if (stock.id == identifier || stock.name == identifier) {
+      return stock;
+    }
+  });
+  if (find) {
+    return find;
+  } else {
+    console.log("not found !");
+    return [];
+  }
+};
+console.log(searchStock("BrightFuture Academy"));
 // const  filterStocksByPrice =(givenPrice, above) => {}
 // const  OperateOnStock = (operation, identifier) => {
 //   `operation must be “buy” or “sell`
