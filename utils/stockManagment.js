@@ -65,8 +65,13 @@ const searchStock = (identifier) => {
     return [];
   }
 };
-console.log(searchStock("BrightFuture Academy"));
-// const  filterStocksByPrice =(givenPrice, above) => {}
+
+const filterStocksByPrice = (givenPrice, above) => {
+  if (above) {
+    return stocks.filter((stock) => stock.currentPrice >= givenPrice);
+  } else {return stocks.filter((stock) => stock.currentPrice <= givenPrice);}
+};
 // const  OperateOnStock = (operation, identifier) => {
 //   `operation must be “buy” or “sell`
 // }
+console.log(filterStocksByPrice(70, true));
