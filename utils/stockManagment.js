@@ -51,7 +51,7 @@ const buyStock = (stockId, amount) => {
   updateCategoryPrice(stocks[stockIndex].category, 0.99);
 };
 
-const searchStock = (identifier) => {
+export const searchStock = (identifier) => {
   const find = stocks.find((stock) => {
     if (stock.id == identifier || stock.name == identifier) {
       return stock;
@@ -65,7 +65,7 @@ const searchStock = (identifier) => {
   }
 };
 
-const filterStocksByPrice = (givenPrice, above) => {
+export const filterStocksByPrice = (givenPrice, above) => {
   if (above) {
     return stocks.filter((stock) => stock.currentPrice >= givenPrice);
   } else {
@@ -73,7 +73,7 @@ const filterStocksByPrice = (givenPrice, above) => {
   }
 };
 
-const OperateOnStock = (operation, identifier) => {
+export const operateOnStock = (operation, identifier) => {
   const action = operation === "sell" ? saleStock : buyStock;
   let stockId;
   do {
