@@ -74,19 +74,23 @@ export const filterStocksByPrice = (givenPrice, above) => {
 };
 
 export const operateOnStock = (operation, identifier) => {
-  const action = operation === "sell" ? saleStock : buyStock;
   let stockId;
   do {
     stockId = searchStock(identifier).id;
   } while (stockId === undefined);
   let amount;
   do {
-    amount = input("Enter amount of stocks you want to buy ");
+    amount = input("Enter amount of stocks you want to buy or sell ");
+    operation = input('Enter buy or sell')
   } while (
     operation === "sell" &&
     amount > stocks[getIndexOfStock(stockId)].availableStocks
+
   );
-  action(stockId, amount);
+  if (operation === "sell") {
+    saleStock(stockId, amount);
+  } else if (operation === "buy") {
+    buyStock(stockId, amount);
+  }
   updateLastUpdated();
 };
-
