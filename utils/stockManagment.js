@@ -4,7 +4,7 @@ const stocks = stockMarket.stocks;
 
 const getCategoryIndexes = (category) => {
   const indexes = [];
-  for (let i = 0; i < stocks.length - 1; i++) {
+  for (let i = 0; i < stocks.length; i++) {
     if (stocks[i].category === category) {
       indexes.push(i);
     }
@@ -27,20 +27,22 @@ const updateStockPrice = (stockIndex, increment) => {
   stocks[stockIndex].currentPrice = newPrice;
 };
 
-const updateCategoryPrice = (category, increment) => {
+const updateCategoryPrice = (category, increment, excludeStockIndex) => {
   const categoryIndexes = getCategoryIndexes(category);
   categoryIndexes.forEach((index) => {
-    addToPreviousPrices(index, stocks[index].currentPrice);
-    updateStockPrice(index, increment);
+    if (index !== excludeStockIndex) {
+      addToPreviousPrices(index, stocks[index].currentPrice);
+      updateStockPrice(index, increment);
+    }
   });
 };
 
 const saleStock = (stockId, amount) => {
   const stockIndex = getIndexOfStock(stockId);
-  stocks[stockIndex].availableStocks -= amount;
+  stocks[stockIndex].availableStocks -= (+amount);
   addToPreviousPrices(stockIndex, stocks[stockIndex].currentPrice);
   updateStockPrice(stockIndex, 1.05);
-  updateCategoryPrice(stocks[stockIndex].category, 1.01);
+  updateCategoryPrice(stocks[stockIndex].category, 1.01, stockIndex);
 };
 
 const buyStock = (stockId, amount) => {
@@ -48,7 +50,7 @@ const buyStock = (stockId, amount) => {
   stocks[stockIndex].availableStocks += (+amount);
   addToPreviousPrices(stockIndex, stocks[stockIndex].currentPrice);
   updateStockPrice(stockIndex, 0.95);
-  updateCategoryPrice(stocks[stockIndex].category, 0.99);
+  updateCategoryPrice(stocks[stockIndex].category, 0.99, stockIndex);
 };
 
 export const searchStock = (identifier) => {
@@ -75,16 +77,18 @@ export const filterStocksByPrice = (givenPrice, above) => {
 
 export const operateOnStock = (operation, identifier) => {
   let stockId;
-  do {
-    stockId = searchStock(identifier).id;
-  } while (stockId === undefined);
+  let searchResult = searchStock(identifier);
+  while (searchResult.length === 0 || !searchResult.id) {
+    identifier = input("Stock not found! Enter valid id or name of stock: ");
+    searchResult = searchStock(identifier);
+  }
+  stockId = searchResult.id;
   let amount;
   do {
-    amount = input("Enter amount of stocks you want to buy or sell ");
+    amount = +input("Enter amount of stocks you want to buy or sell ");
   } while (
     operation === "sell" &&
     amount > stocks[getIndexOfStock(stockId)].availableStocks
-
   );
   if (operation === "sell") {
     saleStock(stockId, amount);

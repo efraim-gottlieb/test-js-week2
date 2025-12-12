@@ -13,15 +13,13 @@ while (choice !== "4") {
     let above;
     let givenPrice;
     do {
-      givenPrice = input("Enter a price ");
-      try {
-        above = +input(
-          "Enter 1 to get above the number or 0 to get under the number "
-        );
-      } catch {}
+      givenPrice = +input("Enter a price ");
+      above = +input(
+        "Enter 1 to get above the number or 0 to get under the number "
+      );
     } while (
-      typeof givenPrice === "number" &&
-      (above == true || above == false)
+      isNaN(givenPrice) || givenPrice < 0 ||
+      (above !== 0 && above !== 1)
     );
     console.log(filterStocksByPrice(givenPrice, above));
   } else if (choice == "3") {
